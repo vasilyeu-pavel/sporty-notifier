@@ -1,7 +1,7 @@
 const { goToPage } = require('./utils/page');
 
 const targetLeagues = [
-    // forball
+    // football
     'Denmark - Superliga',
     'Denmark - DBU Pokalen',
     'Denmark - Play-offs 1/2',
@@ -16,6 +16,7 @@ const targetLeagues = [
     'Sweden - Damallsvenskan',
     'Sweden - Elitettan',
     'Sweden - Svenska Cupen',
+    'Poland - Ekstraklasa',
     // hockey
     'ШВЕЦИЯ-Элитсериен',
     'ФИНЛЯНДИЯ-Местис (Вторая лига)',

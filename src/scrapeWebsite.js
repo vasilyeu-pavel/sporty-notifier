@@ -24,6 +24,8 @@ const targetLeagues = [
     'ФИНЛЯНДИЯ-Суоми-сарья (Третья лига)',
     'ГЕРМАНИЯ-ДЕЛ',
     'ФРАНЦИЯ-Магнус лига',
+    'ФИНЛЯНДИЯ-Nuorten SM-Liiga - Этап победителей',
+    'ФИНЛЯНДИЯ-Nuorten SM-Liiga - Понижение (плей-офф)',
 ];
 
 const loadDisableRows = async page =>

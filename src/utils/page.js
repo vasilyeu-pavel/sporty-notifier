@@ -31,7 +31,7 @@ const goToPage = async (browser, link, isBlockedScripts = false) => {
         'clicksor',
         'tiqcdn',
         '.png',
-        'jquery',
+        // 'jquery',
     ];
 
     const page = await browser.newPage();

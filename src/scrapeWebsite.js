@@ -2,6 +2,7 @@ const { goToPage } = require('./utils/page');
 
 const targetLeagues = [
     // football
+    'Argentina - Reserve League',
     'Denmark - Superliga',
     'Denmark - DBU Pokalen',
     'Denmark - Play-offs 1/2',
@@ -86,9 +87,11 @@ const getAllMatches = async (page, scrapeDate, sport) =>
 
                 while (!startEl.getAttribute('class').includes('group-head')) {
                     if (!startEl.getAttribute('class').includes('round-head')) {
-                        leagueResult.matches.push({
-                            match: `${startEl.querySelector('.team-a').innerText}-${startEl.querySelector('.team-b').innerText}`.replace(/ /g, ''),
-                        });
+                        if (startEl.querySelector('.team-a') && startEl.querySelector('.team-b')) {
+                            leagueResult.matches.push({
+                                match: `${startEl.querySelector('.team-a').innerText}-${startEl.querySelector('.team-b').innerText}`.replace(/ /g, ''),
+                            });
+                        }
                     }
 
                     startEl = startEl.nextElementSibling;

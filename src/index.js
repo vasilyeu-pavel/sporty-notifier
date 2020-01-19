@@ -13,6 +13,10 @@ const websites = [
     {
         website: 'https://www.myscore.com.ua/hockey/',
         sport: 'hockey'
+    },
+    {
+        website: 'https://www.myscore.com.ua/basketball/',
+        sport: 'basketball'
     }
     // {
     //     website: `http://www.scoresway.com/?sport=hockey&page=matches&date=${getYear(tomorrow)}-${getMonth(tomorrow)}-${getDay(0, tomorrow) < 10 ? '0' + getDay(0, tomorrow) : getDay(0, tomorrow)}`,

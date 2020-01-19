@@ -27,6 +27,9 @@ const targetLeagues = [
     'ФРАНЦИЯ-Магнус лига',
     'ФИНЛЯНДИЯ-Nuorten SM-Liiga - Этап победителей',
     'ФИНЛЯНДИЯ-Nuorten SM-Liiga - Понижение (плей-офф)',
+    // basketball
+    'БЕЛАРУСЬ-Высшая лига - Этап победителей',
+    'БЕЛАРУСЬ-Высшая лига - Этап проигравших',
 ];
 
 const loadDisableRows = async page =>
@@ -49,7 +52,7 @@ const loadDisableRows = async page =>
 const hideOpenedRows = async (page, scrapeDate, sport) =>
     await page.evaluate(({ leagues, date, sport }) =>
         // find all rows
-        [...document.querySelector('.hockey').querySelectorAll('.event__header')]
+        [...document.querySelector(`.${sport}`).querySelectorAll('.event__header')]
             .filter(row => row)
             .map(row => {
                 const collapseButton = row.querySelector('.collapse');

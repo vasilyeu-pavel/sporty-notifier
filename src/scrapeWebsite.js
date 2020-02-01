@@ -1,36 +1,5 @@
 const { goToPage } = require('./utils/page');
-
-const targetLeagues = [
-    // football
-    'Argentina - Reserve League',
-    'Denmark - Superliga',
-    'Denmark - DBU Pokalen',
-    'Denmark - Play-offs 1/2',
-    'Norway - Eliteserien',
-    'Norway - 1. Division',
-    'Norway - 2. Division',
-    'Norway - 3. Division',
-    'Norway - NM Cupen',
-    'Sweden - Allsvenskan',
-    'Sweden - Superettan',
-    'Sweden - Division 1',
-    'Sweden - Damallsvenskan',
-    'Sweden - Elitettan',
-    'Sweden - Svenska Cupen',
-    'Poland - Ekstraklasa',
-    // hockey
-    'ШВЕЦИЯ-Элитсериен',
-    'ФИНЛЯНДИЯ-Местис (Вторая лига)',
-    'ФИНЛЯНДИЯ-Nuorten SM-Liiga',
-    'ФИНЛЯНДИЯ-Суоми-сарья (Третья лига)',
-    'ГЕРМАНИЯ-ДЕЛ',
-    'ФРАНЦИЯ-Магнус лига',
-    'ФИНЛЯНДИЯ-Nuorten SM-Liiga - Этап победителей',
-    'ФИНЛЯНДИЯ-Nuorten SM-Liiga - Понижение (плей-офф)',
-    // basketball
-    'БЕЛАРУСЬ-Высшая лига - Этап победителей',
-    'БЕЛАРУСЬ-Высшая лига - Этап проигравших',
-];
+const { targetLeagues } = require('./utils/leagusData');
 
 const loadDisableRows = async page =>
     await page.evaluate(({ leagues }) =>

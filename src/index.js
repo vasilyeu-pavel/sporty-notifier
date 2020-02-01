@@ -18,10 +18,6 @@ const websites = [
         website: 'https://www.myscore.com.ua/basketball/',
         sport: 'basketball'
     }
-    // {
-    //     website: `http://www.scoresway.com/?sport=hockey&page=matches&date=${getYear(tomorrow)}-${getMonth(tomorrow)}-${getDay(0, tomorrow) < 10 ? '0' + getDay(0, tomorrow) : getDay(0, tomorrow)}`,
-    //     sport: 'hockey'
-    // }
 ];
 
 const scraper = async () => {
@@ -35,27 +31,21 @@ const scraper = async () => {
         ],
     }); // headless: false
 
-    const result = [];
+    try {
+        const result = await Promise.all(websites.map(({ website, sport }) =>
+            scrapeWebsite(browser, website, scrapeDate, sport)));
 
-    for (const { website, sport } of websites) {
-        console.time(website);
-        try {
-            const allMatches = await scrapeWebsite(browser, website, scrapeDate, sport);
-            if (allMatches.length) {
-                result.push(allMatches);
-            }
-        } catch (e) {
-            console.error(e.message);
+        await browser.close();
+
+        console.timeEnd('scrape');
+
+        if (result.length) {
+            await sendTelegramMessage(result.filter(el => el.length));
+            return result;
         }
-        console.timeEnd(website);
-    }
 
-    await browser.close();
-    console.timeEnd('scrape');
-
-    if (result.length) {
-        await sendTelegramMessage(result);
-        return result;
+    } catch (e) {
+        console.error(e.message);
     }
 
     return [];

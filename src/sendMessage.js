@@ -9,7 +9,7 @@ ${events.map(({ league, matches }, i) => `\n${i + 1}) ${league} - *${matches.len
 }`;
 
 const sendTelegramMessage = message => new Promise((resolve, reject) => {
-    const messages = createMessage(message).replace(/,/g, '');
+    const messages = typeof message === 'object' ? createMessage(message).replace(/,/g, '') : message;
 
     const options = {
         method: 'GET',

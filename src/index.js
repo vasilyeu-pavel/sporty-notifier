@@ -39,9 +39,13 @@ const scraper = async () => {
 
         console.timeEnd('scrape');
 
-        if (result.length) {
+        if (result.length && result.some(res => res.length)) {
             await sendTelegramMessage(result.filter(el => el.length));
             return result;
+        } else {
+            const messages = `На *[${scrapeDate}]* не было найдено спортивных событий`;
+            console.log(messages);
+            await sendTelegramMessage(messages);
         }
 
     } catch (e) {

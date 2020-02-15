@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const { getFullDate } = require('./utils/formatDate');
 const { scrapeWebsite } = require('./scrapeWebsite');
-const { Telegram } = require('./sendMessage');
+const { Telegram } = require('./telegramAPI');
 const { getWebsite } = require('./data/websites');
 
 const scraper = async (date = Date.now()) => {

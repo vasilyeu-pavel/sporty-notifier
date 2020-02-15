@@ -1,0 +1,93 @@
+[
+    {
+        "name": "Denmark - Superliga"
+    },
+    {
+        "name": "Denmark - DBU Pokalen"
+    },
+    {
+        "name": "Denmark - Play-offs 1/2"
+    },
+    {
+        "name": "Norway - Eliteserien"
+    },
+    {
+        "name": "Norway - 1. Division"
+    },
+    {
+        "name": "Norway - 2. Division"
+    },
+    {
+        "name": "Norway - 3. Division"
+    },
+    {
+        "name": "Norway - NM Cupen"
+    },
+    {
+        "name": "Sweden - Allsvenskan"
+    },
+    {
+        "name": "Sweden - Superettan"
+    },
+    {
+        "name": "Sweden - Division 1"
+    },
+    {
+        "name": "Sweden - Damallsvenskan"
+    },
+    {
+        "name": "Sweden - Elitettan"
+    },
+    {
+        "name": "Sweden - Svenska Cupen"
+    },
+    {
+        "name": "Poland - Ekstraklasa",
+        "showMatches": true
+    },
+
+
+
+    {
+        "name": "ШВЕЦИЯ-Элитсериен"
+    },
+    {
+        "name": "ФИНЛЯНДИЯ-Местис (Вторая лига)"
+    },
+    {
+        "name": "ФИНЛЯНДИЯ-Nuorten SM-Liiga"
+    },
+    {
+        "name": "ФИНЛЯНДИЯ-Суоми-сарья (Третья лига)"
+    },
+    {
+        "name": "ГЕРМАНИЯ-ДЕЛ"
+    },
+    {
+        "name": "ФРАНЦИЯ-Магнус лига"
+    },
+    {
+        "name": "ФИНЛЯНДИЯ-Nuorten SM-Liiga - Этап победителей"
+    },
+    {
+        "name": "ФИНЛЯНДИЯ-Nuorten SM-Liiga - Понижение (плей-офф)"
+    },
+    {
+        "name": "ФИНЛЯНДИЯ-Суоми-сарья (Третья лига) - Этап победителей"
+    },
+    {
+        "name": "ФИНЛЯНДИЯ-Суоми-сарья (Третья лига) - Этап проигравших"
+    },
+
+
+
+    {
+        "name": "БЕЛАРУСЬ-Высшая лига"
+    },
+    {
+        "name": "БЕЛАРУСЬ-Высшая лига - Этап победителей"
+    },
+    {
+        "name": "БЕЛАРУСЬ-Высшая лига - Этап проигравших"
+    }
+]

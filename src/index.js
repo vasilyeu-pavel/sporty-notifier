@@ -1,29 +1,19 @@
 const puppeteer = require('puppeteer');
-const { getYear, getMonth, getDay, getTomorrow } = require('./utils/formatDate');
+const { getFullDate } = require('./utils/formatDate');
 const { scrapeWebsite } = require('./scrapeWebsite');
-const { sendTelegramMessage } = require('./sendMessage');
+const { Telegram } = require('./sendMessage');
+const { getWebsite } = require('./data/websites');
 
-const tomorrow = new Date();
+const scraper = async (date = Date.now()) => {
+    const telegram = new Telegram();
 
-const websites = [
-    {
-        website: `https://www.soccerway.com/matches/${getYear(tomorrow)}/${getMonth(tomorrow)}/${getDay(0, tomorrow) < 10 ? '0' + getDay(0, tomorrow) : getDay(0, tomorrow)}/`,
-        sport: 'football',
-    },
-    {
-        website: 'https://www.myscore.com.ua/hockey/',
-        sport: 'hockey'
-    },
-    {
-        website: 'https://www.myscore.com.ua/basketball/',
-        sport: 'basketball'
-    }
-];
+    const fullDate = getFullDate(date);
 
-const scraper = async () => {
+    const websites = getWebsite(fullDate('/'));
+
     console.log('start scraping!');
     console.time('scrape');
-    const scrapeDate = `${getYear(tomorrow)}-${getMonth(tomorrow)}-${getDay(0, tomorrow) < 10 ? '0' + getDay(0, tomorrow): getDay(0, tomorrow)}`;
+    const scrapeDate = fullDate('-');
 
     const browser = await puppeteer.launch({
         args: [
@@ -32,27 +22,32 @@ const scraper = async () => {
     }); // headless: false
 
     try {
-        const result = await Promise.all(websites.map(({ website, sport }) =>
-            scrapeWebsite(browser, website, scrapeDate, sport)));
+        const result = await Promise.all(websites.map(websiteOption =>
+            scrapeWebsite({
+                ...websiteOption,
+                browser,
+                scrapeDate
+            })));
 
         await browser.close();
 
         console.timeEnd('scrape');
 
+        console.log(JSON.stringify(result, null, 4));
+
         if (result.length && result.some(res => res.length)) {
-            await sendTelegramMessage(result.filter(el => el.length));
-            return result;
+            telegram.setMessage(result.filter(el => el.length));
         } else {
             const messages = `На *[${scrapeDate}]* не было найдено спортивных событий`;
             console.log(messages);
-            await sendTelegramMessage(messages);
+            telegram.setMessage(messages);
         }
 
     } catch (e) {
         console.error(e.message);
     }
 
-    return [];
+    telegram.send();
 };
 
 module.exports = {

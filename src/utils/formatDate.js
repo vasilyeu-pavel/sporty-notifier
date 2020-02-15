@@ -19,9 +19,20 @@ const getTomorrow = () => {
     return tomorrow;
 };
 
+const getFullDate = (date) => {
+    const currentDate = new Date(date);
+
+    return (separator = '/') => {
+        return `${getYear(currentDate)}${separator}${getMonth(currentDate)}${separator}${getDay(0, currentDate) < 10
+            ? '0' + getDay(0, currentDate)
+            : getDay(0, currentDate)}`;
+    };
+};
+
 module.exports = {
     getYear,
     getMonth,
     getDay,
     getTomorrow,
+    getFullDate,
 };

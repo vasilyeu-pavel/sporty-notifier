@@ -60,12 +60,11 @@ const goToPage = async (browser, link, isBlockedScripts = false) => {
         ...await Promise.all(msg.args().map(arg => arg.jsonValue()))
     ));
 
-    // add custom func to puppetter context
-    // await page.exposeFunction('test', (a) => console.log('evaluate', a));
+    // await page.exposeFunction('getMatchName', (home, away) => `${home}-${away}`.replace(/ /g, ''));
     //
-    // await page.evaluate(() => {
-    //     window.test('123213123123')
-    // });
+    // await page.evaluate(async () => {
+    //     const matchName = await window.getMatchName('home', 'away')
+    // }, {});
 
     return page;
 };

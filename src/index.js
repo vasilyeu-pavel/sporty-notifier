@@ -1,12 +1,10 @@
 const puppeteer = require('puppeteer');
 const { getFullDate } = require('./utils/formatDate');
 const { scrapeWebsite } = require('./scrapeWebsite');
-const { Telegram } = require('./telegramAPI');
 const { getWebsite } = require('./data/websites');
+const createEmitter = require('./emitter');
 
 const scraper = async (date = Date.now()) => {
-    const telegram = new Telegram();
-
     const fullDate = getFullDate(date);
 
     const websites = getWebsite(fullDate('/'));
@@ -14,6 +12,8 @@ const scraper = async (date = Date.now()) => {
     console.log('start scraping!');
     console.time('scrape');
     const scrapeDate = fullDate('-');
+
+    const scraperEmitter = createEmitter(scrapeDate)();
 
     const browser = await puppeteer.launch({
         args: [
@@ -34,21 +34,25 @@ const scraper = async (date = Date.now()) => {
 
         console.timeEnd('scrape');
 
-        console.log(JSON.stringify(result, null, 4));
-
         if (result.length && result.some(res => res.length)) {
-            telegram.setMessage(result.filter(el => el.length));
+            const filteredMatches = result.filter(el => el.length);
+
+            scraperEmitter.emit('pushAll', filteredMatches);
+
+            filteredMatches.forEach(events => events.forEach(league => {
+                if (!league.isImportant) return;
+
+                scraperEmitter.emit('pushImportant', league);
+            }));
         } else {
-            const messages = `На *[${scrapeDate}]* не было найдено спортивных событий`;
-            console.log(messages);
-            telegram.setMessage(messages);
+            scraperEmitter.emit('notFound');
         }
 
     } catch (e) {
         console.error(e.message);
     }
 
-    telegram.send();
+    scraperEmitter.emit('send');
 };
 
 module.exports = {

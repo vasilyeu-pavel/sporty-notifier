@@ -1,6 +1,7 @@
 [
     {
-        "name": "Denmark - Superliga"
+        "name": "Denmark - Superliga",
+        "isImportant": true
     },
     {
         "name": "Denmark - DBU Pokalen"
@@ -43,7 +44,7 @@
     },
     {
         "name": "Poland - Ekstraklasa",
-        "showMatches": true
+        "isImportant": true
     },
 
 

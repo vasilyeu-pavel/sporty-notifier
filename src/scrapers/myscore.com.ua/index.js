@@ -28,7 +28,7 @@ const targetLeagues = require('../../data/leagues.json');
 const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
     const selectors = getSelectors(website);
 
-    return await page.evaluate(({ leagues, date, sport, selectors, options }) => {
+    return await page.evaluate(async ({ leagues, date, sport, selectors, options }) => {
             const {
                 rowSelector,
                 hide,

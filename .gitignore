@@ -1,0 +1,3 @@
+./src/googleCalendar/credentials.json
+./src/googleCalendar/token.json
+node_modules/

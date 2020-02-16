@@ -3,11 +3,17 @@ const { getFullDate } = require('./utils/formatDate');
 const { scrapeWebsite } = require('./scrapeWebsite');
 const { getWebsite } = require('./data/websites');
 const createEmitter = require('./emitter');
+const {
+    AuthGoogle
+} = require('./googleCalendar');
 
 const initialEmitter = createEmitter();
-const emitter = initialEmitter();
 
 const scraper = async (date = Date.now()) => {
+    const auth = await AuthGoogle();
+
+    const emitter = initialEmitter({ auth });
+
     const fullDate = getFullDate(date);
 
     const websites = getWebsite(fullDate('/'));

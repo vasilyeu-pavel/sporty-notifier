@@ -1,0 +1,134 @@
+[
+  [
+    [
+      {
+        "name": "Denmark - Superliga",
+        "isImportant": true,
+        "league": "Denmark-Superliga",
+        "date": "2020-02-17",
+        "sport": "football",
+        "matches": [
+          {
+            "match": "SønderjyskE-Hobro",
+            "start": "14:00"
+          },
+          {
+            "match": "Nordsjælland-Horsens",
+            "start": "16:00"
+          },
+          {
+            "match": "Silkeborg-AaB",
+            "start": "16:00"
+          },
+          {
+            "match": "AGF-Randers",
+            "start": "18:00"
+          },
+          {
+            "match": "OB-Brøndby",
+            "start": "20:00"
+          }
+        ]
+      },
+      {
+        "name": "Poland - Ekstraklasa",
+        "isImportant": true,
+        "league": "Poland-Ekstraklasa",
+        "date": "2020-02-17",
+        "sport": "football",
+        "matches": [
+          {
+            "match": "JagielloniaBiałystok-KoronaKielce",
+            "start": "14:30"
+          },
+          {
+            "match": "ZagłębieLubin-WisłaKraków",
+            "start": "17:00"
+          },
+          {
+            "match": "CracoviaKraków-LechPoznań",
+            "start": "19:30"
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "name": "ГЕРМАНИЯ-ДЕЛ",
+        "league": "ГЕРМАНИЯ-ДЕЛ",
+        "sport": "hockey",
+        "date": "2020-02-17",
+        "matches": [
+          {
+            "match": "АйсбаренБерлин-АдлерМангейм",
+            "start": "15:15"
+          },
+          {
+            "match": "Мюнхен-Бремерхавен",
+            "start": "16:00"
+          },
+          {
+            "match": "Аугсбюргер-Вольфсбург",
+            "start": "18:30"
+          },
+          {
+            "match": "Дюссельдорф-КёльнерХайе",
+            "start": "18:30"
+          },
+          {
+            "match": "ИзерлонРустерс-Крефельд",
+            "start": "18:30"
+          },
+          {
+            "match": "СтробингТайгерз-Ингольштадт",
+            "start": "18:30"
+          },
+          {
+            "match": "НюрнбергАйсТайгерс-Швеннингер",
+            "start": "21:00"
+          }
+        ]
+      },
+      {
+        "name": "ФИНЛЯНДИЯ-Суоми-сарья (Третья лига) - Этап победителей",
+        "league": "ФИНЛЯНДИЯ-Суоми-сарья (Третья лига) - Этап победителей",
+        "sport": "hockey",
+        "date": "2020-02-17",
+        "matches": [
+          {
+            "match": "РаахеК-Киекко-Эспоо",
+            "start": "17:00"
+          },
+          {
+            "match": "Д-Киекко-Джайентс",
+            "start": "18:30"
+          }
+        ]
+      },
+      {
+        "name": "ФИНЛЯНДИЯ-Суоми-сарья (Третья лига) - Этап проигравших",
+        "league": "ФИНЛЯНДИЯ-Суоми-сарья (Третья лига) - Этап проигравших",
+        "sport": "hockey",
+        "date": "2020-02-17",
+        "matches": [
+          {
+            "match": "ИндиансКаарина-С-Киекко",
+            "start": "14:30"
+          },
+          {
+            "match": "Риему-ХаукатЯрвенпаа",
+            "start": "15:15"
+          },
+          {
+            "match": "МюикХоккей-Титаанит",
+            "start": "17:00"
+          },
+          {
+            "match": "Лазер-КархуХТ",
+            "start": "17:45"
+          }
+        ]
+      }
+    ]
+  ]
+]

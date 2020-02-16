@@ -32,6 +32,10 @@ const scraper = async (date = Date.now()) => {
     });
 
     try {
+        // for develop mode you can commenting scraping and use mocks
+        // mocks data for develop
+        // const mocks = require('./data/mocks.json');
+        // const result = mocks;
         const result = await Promise.all(websites.map(websiteOption =>
             scrapeWebsite({
                 ...websiteOption,
@@ -44,15 +48,19 @@ const scraper = async (date = Date.now()) => {
         console.timeEnd('scrape');
 
         if (result.length && result.some(res => res.length)) {
+            // remove empty element
             const filteredMatches = result.filter(el => el.length);
 
             emitter.emit('pushAll', filteredMatches);
 
-            filteredMatches.forEach(events => events.forEach(league => {
-                if (!league.isImportant) return;
+            filteredMatches.forEach(events => events.forEach(sports => {
+                if (!sports || !sports.length) return;
 
-                emitter.emit('pushImportant', league);
-            }));
+                sports.forEach(league => {
+                    if (!league.isImportant) return;
+
+                    emitter.emit('pushImportant', league);
+                })}));
 
             if (!result.length) return;
         } else {

@@ -1,6 +1,6 @@
 const EventEmitter = require('events');
 const { Telegram } = require('../telegramAPI');
-const { createEvents } = require('../googleCalendar');
+const { listEvents, saveMatchesInGC, getMatchesToSave } = require('../googleCalendar');
 
 const telegram = new Telegram();
 
@@ -25,25 +25,11 @@ const createEmitter = (scrapeDate = null, all = [], important = []) => {
         scraperEmitter.on('setDate', date => state.scrapeDate = date);
 
         scraperEmitter.on('pushImportant', async (importantMatches) => {
-            const { important, auth } = state;
-            const { name, date, matches } = importantMatches;
+            const { important } = state;
 
             important.push(importantMatches);
 
             telegram.setImportantMessage(importantMatches);
-
-            for (const { match, start } of matches) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                    if (start.includes(':')) {
-                        createEvents({
-                            auth,
-                            name: match,
-                            description: name,
-                            date,
-                            time: start,
-                        })
-                    }
-            }
         });
 
         scraperEmitter.on('notFound', () => {
@@ -55,14 +41,32 @@ const createEmitter = (scrapeDate = null, all = [], important = []) => {
         });
 
         scraperEmitter.on('send', async () => {
-            const { all, auth } = state;
+            const { all, auth, important, scrapeDate } = state;
             try {
-                // await telegram.send();
+                // send scraps matches to telegram bot
+                await telegram.send();
+
                 console.log('scrape was success');
-                // console.log(JSON.stringify(all, null, 4));
+                // get google events
+                const matchesFromGoogle = await listEvents(auth, scrapeDate);
+
+                if (!important.length) return [];
+
+                // filtered
+                const matchesToSave = getMatchesToSave(important, matchesFromGoogle);
+
+                if (!matchesToSave.length) return;
+
+                const { name, date } = important[0];
+
+                // save filtered matches
+                await saveMatchesInGC(auth, matchesToSave, name, date);
+
+                console.log(JSON.stringify(all, null, 4));
             } catch (e) {
                 console.log(e);
             }
+
         });
 
         return scraperEmitter;

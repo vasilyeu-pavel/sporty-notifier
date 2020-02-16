@@ -25,7 +25,7 @@ class Telegram {
         return     `[#МатчиRIP] на *${message[0][0].date}*:
     ${message.map((events, k) => `
 ${k !== 0 ? `\n` : ``}*${events[0].sport}*
-${events.map(({ league, matches }, i) => `\n${i + 1}) ${league} - *${matches.length}*`)}`)
+${events.map(({ league, matches }, i) => `\n${i + 1}) ${league} - *${matches && matches.length}*`)}`)
             }`;
     }
 

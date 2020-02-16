@@ -55,6 +55,18 @@ const goToPage = async (browser, link, isBlockedScripts = false) => {
 
     await page.waitFor(100);
 
+    // add logger to evaluate
+    page.on('console', async msg => console[msg._type](
+        ...await Promise.all(msg.args().map(arg => arg.jsonValue()))
+    ));
+
+    // add custom func to puppetter context
+    // await page.exposeFunction('test', (a) => console.log('evaluate', a));
+    //
+    // await page.evaluate(() => {
+    //     window.test('123213123123')
+    // });
+
     return page;
 };
 

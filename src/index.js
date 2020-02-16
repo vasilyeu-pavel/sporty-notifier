@@ -19,7 +19,8 @@ const scraper = async (date = Date.now()) => {
         args: [
             '--no-sandbox',
         ],
-    }); // headless: false
+        // headless: false
+    });
 
     try {
         const result = await Promise.all(websites.map(websiteOption =>

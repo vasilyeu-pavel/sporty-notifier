@@ -4,6 +4,9 @@ const { scrapeWebsite } = require('./scrapeWebsite');
 const { getWebsite } = require('./data/websites');
 const createEmitter = require('./emitter');
 
+const initialEmitter = createEmitter();
+const emitter = initialEmitter();
+
 const scraper = async (date = Date.now()) => {
     const fullDate = getFullDate(date);
 
@@ -13,7 +16,7 @@ const scraper = async (date = Date.now()) => {
     console.time('scrape');
     const scrapeDate = fullDate('-');
 
-    const scraperEmitter = createEmitter(scrapeDate)();
+    emitter.emit('setDate', scrapeDate);
 
     const browser = await puppeteer.launch({
         args: [
@@ -37,22 +40,24 @@ const scraper = async (date = Date.now()) => {
         if (result.length && result.some(res => res.length)) {
             const filteredMatches = result.filter(el => el.length);
 
-            scraperEmitter.emit('pushAll', filteredMatches);
+            emitter.emit('pushAll', filteredMatches);
 
             filteredMatches.forEach(events => events.forEach(league => {
                 if (!league.isImportant) return;
 
-                scraperEmitter.emit('pushImportant', league);
+                emitter.emit('pushImportant', league);
             }));
+
+            if (!result.length) return;
         } else {
-            scraperEmitter.emit('notFound');
+            emitter.emit('notFound');
         }
 
     } catch (e) {
         console.error(e.message);
     }
 
-    scraperEmitter.emit('send');
+    emitter.emit('send');
 };
 
 module.exports = {

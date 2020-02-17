@@ -53,14 +53,12 @@ const scraper = async (date = Date.now()) => {
 
             emitter.emit('pushAll', filteredMatches);
 
-            filteredMatches.forEach(events => events.forEach(sports => {
-                if (!sports || !sports.length) return;
-
-                sports.forEach(league => {
+            filteredMatches.forEach(events => {
+                events.forEach(league => {
                     if (!league.isImportant) return;
 
                     emitter.emit('pushImportant', league);
-                })}));
+                })});
 
             if (!result.length) return;
         } else {

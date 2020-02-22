@@ -66,7 +66,7 @@ const scraper = async (date = Date.now()) => {
         }
 
     } catch (e) {
-        console.error(e.message);
+        console.error(e);
     }
 
     emitter.emit('send');

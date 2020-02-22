@@ -171,12 +171,10 @@ const createEvents = ({
                 dateTime,
                 timeZone: 'Europe/Minsk'
             },
-            recurrence: ['RRULE:FREQ=DAILY;COUNT=2'],
             reminders: {
                 useDefault: false,
                 overrides: [
                     { method: 'popup', minutes: 30 },
-                    { method: 'popup', minutes: 10 }
                 ]
             }
         };

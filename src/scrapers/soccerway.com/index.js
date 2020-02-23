@@ -1,9 +1,11 @@
 const { getSelectors } = require('../../data/selectors');
 const targetLeagues = require('../../data/leagues.json');
-const { helpers, withToString, withParsingConstructor } = require('../../utils/document');
+const { withFunctions } = require('../../utils/document');
+
+const functions = withFunctions()(true);
 
 const loadDisableRows = async (page, selectors) =>
-    await page.evaluate(({ leagues, selectors }) => {
+    await page.evaluate(({ leagues, selectors, functions }) => {
             const {
                 container,
                 rowSelector,
@@ -14,20 +16,34 @@ const loadDisableRows = async (page, selectors) =>
                 }
             } = JSON.parse(selectors);
 
+            // deserialize function
+            const {
+                // function from helpers
+                filterByLeague,
+                getElementBySelector,
+            } = Object.entries(JSON.parse(functions)).reduce((res, cur) => {
+                const name = cur[0];
+                const { body, arg } = cur[1];
+                res[name] = new Function(...arg, body);
+
+                return res;
+            }, {});
+
             // find all rows
             return [...document.querySelector(container).querySelectorAll(rowSelector)]
                 .filter(Boolean)
                 // filter on exist h3
-                .filter(row => row.querySelector(name))
+                .filter(getElementBySelector(name))
                 // filter by user filters
-                .filter(row => leagues.some(({name}) => name === row.querySelector(type).innerText))
+                .filter(filterByLeague(leagues, type))
                 // click on each disable rows
                 .map(row => ![...row.classList].includes(open) && row.firstElementChild.click())
         },
         // vars to eval
         {
             leagues: targetLeagues,
-            selectors: JSON.stringify(selectors)
+            selectors: JSON.stringify(selectors),
+            functions,
         });
 
 /**
@@ -61,10 +77,6 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
             const {
                 container,
                 rowSelector,
-                filter: {
-                    rowFilter,
-                    matchFilter,
-                },
                 match: {
                     away,
                     home,
@@ -76,7 +88,15 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
                 }
             } = JSON.parse(selectors);
 
-            const API = Object.entries(JSON.parse(functions)).reduce((res, cur) => {
+            // deserialize function
+            const {
+                // function from helpers
+                filterByLeague,
+                getTextSelector,
+                findRowWithMatches,
+                getLeagueBySelector,
+                getElementBySelector,
+            } = Object.entries(JSON.parse(functions)).reduce((res, cur) => {
                 const name = cur[0];
                 const { body, arg } = cur[1];
                 res[name] = new Function(...arg, body);
@@ -84,31 +104,25 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
                 return res;
             }, {});
 
-            const {
-                filterByLeague,
-                getTextSelector,
-                findRowWithMatches,
-            } = API;
-
             // using in findRowWithMatches
-            const validate = (startEl) => startEl.querySelector(home) && startEl.querySelector(away);
-            const getMatchStartTime = el => `${el.querySelector(time).innerText.replace(/ /g, '')}`;
+            const validate = (el) => getElementBySelector(home)(el) && getElementBySelector(away)(el);
+            const getMatchStartTime = el => `${getElementBySelector(time)(el).innerText.replace(/ /g, '')}`;
 
-            return [...document.querySelector(container).querySelectorAll(rowSelector)]
+            return [...getElementBySelector(container)(document).querySelectorAll(rowSelector)]
                 .filter(Boolean)
                 // filter on exist h3
-                .filter(row => row.querySelector(name))
+                .filter(getElementBySelector(name))
                 // filter by user filters
-                .filter(row => filterByLeague(row, leagues, type))
+                .filter(filterByLeague(leagues, type))
                 .map(row => ({
                     // for get options from websites list
                     ...options,
                     // for get options from leagues list
-                    ...leagues.find(({ name }) => name.replace(/ /g, '') === getTextSelector(row, type)),
+                    ...getLeagueBySelector(leagues, row, type),
                     league: getTextSelector(row, type),
                     date,
                     sport,
-                    matches: findRowWithMatches(row, website, matchFilter, home, away, getMatchStartTime, validate, rowFilter),
+                    matches: findRowWithMatches(row, website, selectors, getMatchStartTime, validate),
                 }))
         },
         // vars to eval
@@ -119,7 +133,7 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
             selectors: JSON.stringify(selectors),
             options,
             website,
-            functions: JSON.stringify(withParsingConstructor(helpers)),
+            functions,
         })
 };
 

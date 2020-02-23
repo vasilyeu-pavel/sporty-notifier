@@ -10,7 +10,7 @@ const withToString = (obj) => {
     return temp;
 };
 
-const withParsingConstructor = (obj) => {
+const withFunctions = (obj = helpers) => {
     if (!obj || !Object.keys(obj).length) return;
 
     const temp = {};
@@ -24,7 +24,11 @@ const withParsingConstructor = (obj) => {
         };
     }
 
-    return temp;
+    return (toString = false) => {
+      if (!toString) return temp;
+
+      return JSON.stringify(temp);
+    };
 };
 
 // this func call in browser context
@@ -32,6 +36,10 @@ const withParsingConstructor = (obj) => {
 let helpers = {
     test: function(a, b) {
       console.log(a + b)
+    },
+    getElementBySelector: function(selector) {
+        return (element) =>
+            element.querySelector(selector);
     },
     getMatchName: function(home, away) {
         return `${home}-${away}`.replace(/ /g, '');
@@ -42,11 +50,29 @@ let helpers = {
     getTextSelector: function (element, selector) {
         return element.querySelector(selector).innerText.replace(/ /g, '');
     },
-    filterByLeague: function (row, leagues, type) {
-        return leagues.some(({ name: league }) => league === row.querySelector(type).innerText);
+    filterByLeague: function (leagues, type) {
+        return (element) =>
+            leagues.some(({ name: league }) => league === element.querySelector(type).innerText);
+    },
+    getLeagueBySelector: function(leagues, row, type) {
+        return leagues.find(({ name }) => name.replace(/ /g, '') === row.querySelector(type).innerText.replace(/ /g, ''))
     },
     // func: validate && getMatchStartTime was declared in page.evaluate()
-    findRowWithMatches: function (row, website, matchFilter, home, away, getMatchStartTime, validate, rowFilter) {
+    findRowWithMatches: function (row, website, selectors, getMatchStartTime, validate) {
+        const {
+            filter: {
+                rowFilter,
+                matchFilter,
+            },
+            match: {
+                away,
+                home,
+            },
+        } = JSON.parse(selectors);
+
+
+        console.log(selectors);
+
         let startEl = row.nextElementSibling;
         const getHomeName = (startEl, home) => startEl.querySelector(home).innerText;
         const getAwayName = (startEl, away) => startEl.querySelector(away).innerText;
@@ -79,6 +105,5 @@ let helpers = {
 
 module.exports = {
     helpers,
-    withToString,
-    withParsingConstructor,
+    withFunctions,
 };

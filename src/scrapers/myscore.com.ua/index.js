@@ -1,6 +1,8 @@
 const { getSelectors } = require('../../data/selectors');
 const targetLeagues = require('../../data/leagues.json');
-const { helpers, withParsingConstructor } = require('../../utils/document');
+const { withFunctions } = require('../../utils/document');
+
+const functions = withFunctions()(true);
 
 /**
  * get all matches from myscore
@@ -34,10 +36,6 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
                 rowSelector,
                 hide,
                 open,
-                filter: {
-                    rowFilter,
-                    matchFilter,
-                },
                 match: {
                     away,
                     home,
@@ -101,7 +99,7 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
                     league: getLeagueName(row),
                     sport,
                     date,
-                    matches: findRowWithMatches(row, website, matchFilter, home, away, getMatchStartTime, validate, rowFilter),
+                    matches: findRowWithMatches(row, website, selectors, getMatchStartTime, validate),
                 }))
         },
         // vars to eval
@@ -111,7 +109,7 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
             sport,
             selectors: JSON.stringify(selectors),
             options,
-            functions: JSON.stringify(withParsingConstructor(helpers)),
+            functions,
             website,
         }
     );

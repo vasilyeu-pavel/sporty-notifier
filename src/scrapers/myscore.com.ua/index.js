@@ -1,5 +1,6 @@
 const { getSelectors } = require('../../data/selectors');
 const targetLeagues = require('../../data/leagues.json');
+const { helpers, withToString } = require('../../utils/document');
 
 /**
  * get all matches from myscore
@@ -28,7 +29,7 @@ const targetLeagues = require('../../data/leagues.json');
 const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
     const selectors = getSelectors(website);
 
-    return await page.evaluate(async ({ leagues, date, sport, selectors, options }) => {
+    return await page.evaluate(async ({ leagues, date, sport, selectors, options, functions, website }) => {
             const {
                 rowSelector,
                 hide,
@@ -49,11 +50,10 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
                 }
             } = JSON.parse(selectors);
 
-            const validationRow = el => (el.querySelector(home)
-                && el.querySelector(away)
-                && (el.querySelector(time)
-                    || el.querySelector(status)
-                ));
+            const {
+                findRowWithMatches,
+                getTextSelector,
+            } = JSON.parse(functions);
 
             const handleClick = selector => row => {
                 const collapseButton = row.querySelector(selector);
@@ -62,15 +62,19 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
                 return row;
             };
 
-            const getLeagueName = row => `${row.querySelector(type).innerText}-${row.querySelector(name).innerText}`;
-
-            const getMatchName = ({ home, away }) => `${home}-${away}`.replace(/ /g, '');
-
+            // using in findRowWithMatches
+            const validate = el => (el.querySelector(home)
+                && el.querySelector(away)
+                && (el.querySelector(time)
+                    || el.querySelector(status)
+                ));
             const getMatchStartTime = el => `${el.querySelector(time) ? el.querySelector(time).innerText
                 // "19:30\nTKP"
                     .split('\n')[0]
                 : 'начался'
                 }`.replace(/ /g, ''); // "19 : 30"
+
+            const getLeagueName = row => `${eval(`(${getTextSelector}(row, type))`)}-${eval(`(${getTextSelector}(row, name))`)}`;
 
             // find all rows
             return [...document.querySelector(`.${sport}`).querySelectorAll(rowSelector)]
@@ -82,40 +86,15 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
                 // open only current leagues
                 .map(handleClick(open))
                 // get matches
-                .map(row => {
-                    const leagueResult = {
-                        // for get options from websites list
-                        ...options,
-                        // for get options from leagues list
-                        ...leagues.find(({ name }) => name === getLeagueName(row)),
-                        league: `${getLeagueName(row)}`,
-                        sport,
-                        date,
-                        matches: []
-                    };
-
-                    // save in closes next row
-                    let startEl = row.nextElementSibling;
-
-                    // iterable till not will meet row with event__header class
-                    while (startEl && ![...startEl.classList].includes(rowFilter)) {
-                        if ([...startEl.classList].includes(matchFilter)) {
-                            if (!validationRow(startEl)) return;
-
-                            leagueResult.matches.push({
-                                match: getMatchName({
-                                    home: startEl.querySelector(home).innerText,
-                                    away: startEl.querySelector(away).innerText
-                                }),
-                                start: getMatchStartTime(startEl),
-                            });
-                        }
-
-                        startEl = startEl.nextElementSibling;
-                    }
-
-                    return leagueResult;
-                })
+                .map(row => ({
+                    ...options,
+                    // for get options from leagues list
+                    ...leagues.find(({ name }) => name.replace(/ /g, '') === getLeagueName(row).trim()),
+                    league: `${getLeagueName(row)}`,
+                    sport,
+                    date,
+                    matches: eval(`(${findRowWithMatches}(row, website))`),
+                }))
         },
         // vars to eval
         {
@@ -124,6 +103,8 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
             sport,
             selectors: JSON.stringify(selectors),
             options,
+            functions: JSON.stringify(withToString(helpers)),
+            website,
         }
     );
 };

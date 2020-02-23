@@ -45,6 +45,8 @@ const scraper = async (date = Date.now()) => {
 
         await browser.close();
 
+        console.log(JSON.stringify(result, null, 4));
+
         console.timeEnd('scrape');
 
         if (result.length && result.some(res => res.length)) {
@@ -56,7 +58,6 @@ const scraper = async (date = Date.now()) => {
             filteredMatches.forEach(events => {
                 events.forEach(league => {
                     if (!league.isImportant) return;
-
                     emitter.emit('pushImportant', league);
                 })});
 

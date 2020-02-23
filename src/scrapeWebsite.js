@@ -24,7 +24,7 @@ const scrapeWebsite = async ({
         scrapeDate,
         sport,
         website,
-        ...options
+        options
     });
 
     await page.close();

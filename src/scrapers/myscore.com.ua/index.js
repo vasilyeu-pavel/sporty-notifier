@@ -1,6 +1,6 @@
 const { getSelectors } = require('../../data/selectors');
 const targetLeagues = require('../../data/leagues.json');
-const { helpers, withToString } = require('../../utils/document');
+const { helpers, withParsingConstructor } = require('../../utils/document');
 
 /**
  * get all matches from myscore
@@ -50,10 +50,18 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
                 }
             } = JSON.parse(selectors);
 
+            const API = Object.entries(JSON.parse(functions)).reduce((res, cur) => {
+                const name = cur[0];
+                const { body, arg } = cur[1];
+                res[name] = new Function(...arg, body);
+
+                return res;
+            }, {});
+
             const {
-                findRowWithMatches,
                 getTextSelector,
-            } = JSON.parse(functions);
+                findRowWithMatches,
+            } = API;
 
             const handleClick = selector => row => {
                 const collapseButton = row.querySelector(selector);
@@ -74,7 +82,7 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
                 : 'начался'
                 }`.replace(/ /g, ''); // "19 : 30"
 
-            const getLeagueName = row => `${eval(`(${getTextSelector}(row, type))`)}-${eval(`(${getTextSelector}(row, name))`)}`;
+            const getLeagueName = row => `${getTextSelector(row, type)}-${getTextSelector(row, name)}`;
 
             // find all rows
             return [...document.querySelector(`.${sport}`).querySelectorAll(rowSelector)]
@@ -90,10 +98,10 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
                     ...options,
                     // for get options from leagues list
                     ...leagues.find(({ name }) => name.replace(/ /g, '') === getLeagueName(row).trim()),
-                    league: `${getLeagueName(row)}`,
+                    league: getLeagueName(row),
                     sport,
                     date,
-                    matches: eval(`(${findRowWithMatches}(row, website))`),
+                    matches: findRowWithMatches(row, website, matchFilter, home, away, getMatchStartTime, validate, rowFilter),
                 }))
         },
         // vars to eval
@@ -103,7 +111,7 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
             sport,
             selectors: JSON.stringify(selectors),
             options,
-            functions: JSON.stringify(withToString(helpers)),
+            functions: JSON.stringify(withParsingConstructor(helpers)),
             website,
         }
     );

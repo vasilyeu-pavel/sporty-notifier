@@ -10,9 +10,29 @@ const withToString = (obj) => {
     return temp;
 };
 
+const withParsingConstructor = (obj) => {
+    if (!obj || !Object.keys(obj).length) return;
+
+    const temp = {};
+
+    for (const key in obj) {
+        const f = obj[key].toString();
+
+        temp[key] = {
+            arg: f.toString().split('(')[1].split(')')[0].split(','),
+            body: f.toString().match(/function[^{]+\{([\s\S]*)\}$/)[1],
+        };
+    }
+
+    return temp;
+};
+
 // this func call in browser context
 // and undeclared vars will gets from global browser context
-const helpers = {
+let helpers = {
+    test: function(a, b) {
+      console.log(a + b)
+    },
     getMatchName: function(home, away) {
         return `${home}-${away}`.replace(/ /g, '');
     },
@@ -23,11 +43,10 @@ const helpers = {
         return element.querySelector(selector).innerText.replace(/ /g, '');
     },
     filterByLeague: function (row, leagues, type) {
-        console.log(row, leagues, type)
         return leagues.some(({ name: league }) => league === row.querySelector(type).innerText);
     },
     // func: validate && getMatchStartTime was declared in page.evaluate()
-    findRowWithMatches: function (row, website) {
+    findRowWithMatches: function (row, website, matchFilter, home, away, getMatchStartTime, validate, rowFilter) {
         let startEl = row.nextElementSibling;
         const getHomeName = (startEl, home) => startEl.querySelector(home).innerText;
         const getAwayName = (startEl, away) => startEl.querySelector(away).innerText;
@@ -61,4 +80,5 @@ const helpers = {
 module.exports = {
     helpers,
     withToString,
+    withParsingConstructor,
 };

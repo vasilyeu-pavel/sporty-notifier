@@ -1,6 +1,6 @@
 const { getSelectors } = require('../../data/selectors');
 const targetLeagues = require('../../data/leagues.json');
-const { helpers, withToString } = require('../../utils/document');
+const { helpers, withToString, withParsingConstructor } = require('../../utils/document');
 
 const loadDisableRows = async (page, selectors) =>
     await page.evaluate(({ leagues, selectors }) => {
@@ -76,11 +76,19 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
                 }
             } = JSON.parse(selectors);
 
+            const API = Object.entries(JSON.parse(functions)).reduce((res, cur) => {
+                const name = cur[0];
+                const { body, arg } = cur[1];
+                res[name] = new Function(...arg, body);
+
+                return res;
+            }, {});
+
             const {
                 filterByLeague,
                 getTextSelector,
                 findRowWithMatches,
-            } = JSON.parse(functions);
+            } = API;
 
             // using in findRowWithMatches
             const validate = (startEl) => startEl.querySelector(home) && startEl.querySelector(away);
@@ -91,16 +99,16 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
                 // filter on exist h3
                 .filter(row => row.querySelector(name))
                 // filter by user filters
-                .filter(row => eval(`(${filterByLeague}(row, leagues, type))`))
+                .filter(row => filterByLeague(row, leagues, type))
                 .map(row => ({
                     // for get options from websites list
                     ...options,
                     // for get options from leagues list
-                    ...leagues.find(({ name }) => name.replace(/ /g, '') === eval(`(${getTextSelector}(row, type))`)),
-                    league: eval(`(${getTextSelector}(row, type))`),
+                    ...leagues.find(({ name }) => name.replace(/ /g, '') === getTextSelector(row, type)),
+                    league: getTextSelector(row, type),
                     date,
                     sport,
-                    matches: eval(`(${findRowWithMatches}(row, website))`),
+                    matches: findRowWithMatches(row, website, matchFilter, home, away, getMatchStartTime, validate, rowFilter),
                 }))
         },
         // vars to eval
@@ -111,7 +119,7 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
             selectors: JSON.stringify(selectors),
             options,
             website,
-            functions: JSON.stringify(withToString(helpers))
+            functions: JSON.stringify(withParsingConstructor(helpers)),
         })
 };
 

@@ -4,14 +4,18 @@
   "description": "",
   "main": "./index.js",
   "scripts": {
-    "start": "node ./index.js",
+    "scrape": "node --experimental-worker ./index.js",
+    "start": "cross-env npm run scrape full=full",
+    "start:treads": "npm run scrape",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "cross-env": "^7.0.2",
     "googleapis": "^47.0.0",
     "moment-timezone": "^0.5.21",
     "puppeteer": "^1.9.0",
     "request": "^2.88.0",
+    "through": "^2.3.8",
     "uuid": "^3.3.2"
   },
   "author": "",

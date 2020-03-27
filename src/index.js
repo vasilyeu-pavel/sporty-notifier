@@ -3,9 +3,11 @@ const { getFullDate } = require('./utils/formatDate');
 const { scrapeWebsite } = require('./scrapeWebsite');
 const { getWebsite } = require('./data/websites');
 const createEmitter = require('./emitter');
-const {
-    AuthGoogle
-} = require('./googleCalendar');
+const { AuthGoogle } = require('./googleCalendar');
+
+const { getParams } = require('./utils/process');
+
+const processParams = getParams();
 
 const initialEmitter = createEmitter();
 
@@ -16,7 +18,9 @@ const scraper = async (date = Date.now()) => {
 
     const fullDate = getFullDate(date);
 
-    const websites = getWebsite(fullDate('/'));
+    const websites = processParams[0].full ? getWebsite(fullDate('/')) : processParams;
+
+    console.log(websites);
 
     console.log('start scraping!');
     console.time('scrape');
@@ -25,10 +29,8 @@ const scraper = async (date = Date.now()) => {
     emitter.emit('setDate', scrapeDate);
 
     const browser = await puppeteer.launch({
-        args: [
-            '--no-sandbox',
-        ],
-        // headless: false
+        args: [ '--no-sandbox' ],
+        headless: true // -------> for show browser
     });
 
     try {
@@ -45,8 +47,6 @@ const scraper = async (date = Date.now()) => {
 
         await browser.close();
 
-        console.log(JSON.stringify(result, null, 4));
-
         console.timeEnd('scrape');
 
         if (result.length && result.some(res => res.length)) {
@@ -58,6 +58,7 @@ const scraper = async (date = Date.now()) => {
             filteredMatches.forEach(events => {
                 events.forEach(league => {
                     if (!league.isImportant) return;
+
                     emitter.emit('pushImportant', league);
                 })});
 
@@ -73,6 +74,8 @@ const scraper = async (date = Date.now()) => {
     emitter.emit('send');
 };
 
-module.exports = {
-    scraper
-};
+scraper();
+
+// module.exports = {
+//     scraper
+// };

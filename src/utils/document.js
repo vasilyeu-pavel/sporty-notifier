@@ -70,9 +70,6 @@ let helpers = {
             },
         } = JSON.parse(selectors);
 
-
-        console.log(selectors);
-
         let startEl = row.nextElementSibling;
         const getHomeName = (startEl, home) => startEl.querySelector(home).innerText;
         const getAwayName = (startEl, away) => startEl.querySelector(away).innerText;

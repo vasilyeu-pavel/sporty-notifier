@@ -1,3 +1,5 @@
+// const { withFunctions } = require('../utils/document');
+
 const goToPage = async (browser, link, isBlockedScripts = false) => {
     const blockedResourceTypes = [
         'image',

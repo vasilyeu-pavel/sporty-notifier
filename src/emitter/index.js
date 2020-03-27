@@ -43,6 +43,7 @@ const createEmitter = (scrapeDate = null, all = [], important = []) => {
         scraperEmitter.on('send', async () => {
             const { all, auth, important, scrapeDate } = state;
             try {
+                console.log(JSON.stringify(all, null, 4));
                 // send scraps matches to telegram bot
                 await telegram.send();
 
@@ -61,8 +62,6 @@ const createEmitter = (scrapeDate = null, all = [], important = []) => {
 
                 // save filtered matches
                 await saveMatchesInGC(auth, matchesToSave, name, date);
-
-                console.log(JSON.stringify(all, null, 4));
             } catch (e) {
                 console.log(e);
             }

@@ -88,7 +88,7 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
                 // hide all
                 .map(handleClick(hide))
                 // filter by current leagues
-                .filter(row => leagues.some(({name: league}) => league === getLeagueName(row)))
+                .filter(row => leagues.some(({name: league}) => league.replace(/ /g, '') === getLeagueName(row).replace(/ /g, '')))
                 // open only current leagues
                 .map(handleClick(open))
                 // get matches

@@ -188,7 +188,7 @@ const createEvents = ({
                 console.log('There was an error contacting the Calendar service: ' + err);
                 reject(err);
             }
-            console.log('Event success created');
+            console.log('Event success created', date, name);
             resolve(true);
         });
     })

@@ -5,7 +5,7 @@ const { withFunctions } = require('../../utils/document');
 const functions = withFunctions()(true);
 
 const loadDisableRows = async (page, selectors) =>
-    await page.evaluate(({ leagues, selectors, functions }) => {
+    await page.evaluate(async ({ leagues, selectors, functions }) => {
             const {
                 container,
                 rowSelector,
@@ -73,7 +73,7 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
 
     await page.waitFor(1000);
 
-    return await page.evaluate(({ leagues, date, sport, selectors, options, functions, website }) => {
+    return await page.evaluate(async ({ leagues, date, sport, selectors, options, functions, website }) => {
             const {
                 container,
                 rowSelector,

@@ -76,6 +76,6 @@ const scraper = async (date = Date.now()) => {
 
 scraper();
 
-// module.exports = {
-//     scraper
-// };
+module.exports = {
+    scraper
+};

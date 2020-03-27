@@ -1,6 +1,6 @@
 const { isMainThread, workerData, parentPort } = require('worker_threads');
 
-const terminalTab = require('./openTab');
+const { exec } = require('./process');
 
 const runner = async () => {
     if (!isMainThread) {
@@ -12,9 +12,9 @@ const runner = async () => {
 
         const cmd = `cd ../sporty-notifier/src && node index.js website=${website} sport=${sport}`;
 
-        await terminalTab.open(cmd);
+        await exec(cmd);
 
-        parentPort.postMessage(workerData);
+        parentPort.postMessage(website);
     }
 };
 

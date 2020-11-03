@@ -1,7 +1,7 @@
 const { URL } = require('url');
 
 const selectors = {
-    "myscore.com.ua": {
+    "flashscore.ru": {
         rowSelector: '.event__header',
         filter: {
             rowFilter: 'event__header',

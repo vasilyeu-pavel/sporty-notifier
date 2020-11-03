@@ -76,7 +76,7 @@ let helpers = {
         const getMatchName = (home, away) => `${home}-${away}`.replace(/ /g, '');
 
         const validateRow = (startEl) => (website.includes('soccerway') && ![...startEl.classList].includes(matchFilter)) ||
-            (website.includes('myscore') && [...startEl.classList].includes(matchFilter));
+            (website.includes('flashscore') && [...startEl.classList].includes(matchFilter));
 
         const matches = [];
 

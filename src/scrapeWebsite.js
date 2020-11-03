@@ -13,10 +13,10 @@ const scrapeWebsite = async ({
 
     let page = null;
 
-    if (host.includes('myscore')) {
+    if (host.includes('flashscore')) {
         page = await goToPage(browser, website, false);
     } else {
-        page = await goToPage(browser, website, true);
+        page = await goToPage(browser, website, false);
     }
 
     const allMatches = await getMatches({
@@ -26,6 +26,8 @@ const scrapeWebsite = async ({
         website,
         options
     });
+
+    console.log(allMatches)
 
     await page.close();
 

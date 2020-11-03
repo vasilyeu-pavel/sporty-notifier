@@ -83,7 +83,7 @@ const getMatches = async ({ page, scrapeDate, sport, website, options }) => {
             const getLeagueName = row => `${getTextSelector(row, type)}-${getTextSelector(row, name)}`;
 
             // find all rows
-            return [...document.querySelector(`.${sport}`).querySelectorAll(rowSelector)]
+            return [...document.querySelector(`.sportName,${sport}`).querySelectorAll(rowSelector)]
                 .filter(Boolean)
                 // hide all
                 .map(handleClick(hide))

@@ -30,7 +30,7 @@ const scraper = async (date = Date.now()) => {
 
     const browser = await puppeteer.launch({
         args: [ '--no-sandbox' ],
-        headless: true // -------> for show browser
+        headless: true, // -------> for show browser
     });
 
     try {
@@ -75,7 +75,3 @@ const scraper = async (date = Date.now()) => {
 };
 
 scraper();
-
-module.exports = {
-    scraper
-};

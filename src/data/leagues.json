@@ -40,6 +40,15 @@
         "name": "Sweden - Ettan"
     },
     {
+        "name": "Sweden - Play-offs 1/2"
+    },
+    {
+        "name": "Sweden - Play-offs 2/3"
+    },
+    {
+        "name": "Sweden - Play-offs 3/4"
+    },
+    {
         "name": "Poland - Ekstraklasa",
         "isImportant": true
     },
@@ -90,5 +99,11 @@
     },
     {
         "name": "ФИНЛЯНДИЯ-Суоми-сарья (Третья лига) - Борьба за выживание"
+    },
+    {
+        "name": "ФИНЛЯНДИЯ-СМ-Сарья U20 - Второй этап"
+    },
+    {
+        "name": "ФИНЛЯНДИЯ-СМ-Сарья U20 - Первый этап"
     }
 ]

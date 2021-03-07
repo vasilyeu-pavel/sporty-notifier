@@ -13,8 +13,8 @@
     "cross-env": "^7.0.2",
     "googleapis": "^47.0.0",
     "moment-timezone": "^0.5.21",
+    "node-telegram-bot-api": "^0.51.0",
     "puppeteer": "^1.9.0",
-    "request": "^2.88.0",
     "through": "^2.3.8",
     "uuid": "^3.3.2"
   },

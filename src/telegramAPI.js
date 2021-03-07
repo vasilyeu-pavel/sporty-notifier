@@ -1,9 +1,10 @@
-const request = require("request");
+const TelegramBot = require('node-telegram-bot-api');
 const { config } = require('./config');
+
+const bot = new TelegramBot(config.token, { polling: true });
 
 class Telegram {
     constructor() {
-        this.config = config;
         this.error = null;
         this.date = null;
         this.importantMatches = '';
@@ -34,11 +35,6 @@ class Telegram {
 ${k !== 0 ? `\n` : ``}*${events[0].sport}*
 ${events.map(({ league, matches }, i) => `\n${i + 1}) ${league} - *${matches && matches.length}*`)}`)
             }`;
-    }
-
-    reset() {
-        this.importantMatches = '';
-        this.allMatches = '';
     }
 
     createImportantMessage({ sport, league, matches }) {
@@ -72,28 +68,7 @@ ${matches.map(({match, start}) => `\n- ${match}*[${start}]*`)}
         const message = !this.error ? this.allMatches + this.importantMatches : this.error;
 
         if (message && message.length) {
-            const options = {
-                method: 'GET',
-                url: `https://api.telegram.org/bot${this.config.token}/sendMessage`,
-                qs:
-                    {
-                        chat_id: this.config.chatId,
-                        text: message
-                    },
-                headers: {
-                    'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW'
-                },
-                formData: {
-                    parse_mode: 'Markdown'
-                }
-            };
-
-            await new Promise((resolve, reject) => {
-                request(options, function (error, response, body) {
-                    if (error) reject(error);
-                    resolve(body);
-                });
-            });
+            await bot.sendMessage(config.chatId, message, { parse_mode: "markdown" });
         }
     }
 }

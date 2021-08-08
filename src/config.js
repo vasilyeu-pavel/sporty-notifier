@@ -1,5 +1,5 @@
 const config = {
-    token: '1623315026:AAGJF_vfZVKWG0PqdBQXg8Dn-rvbO9ZwNlk',
+    token: '',
     chatId: 405898308,
 };
 
